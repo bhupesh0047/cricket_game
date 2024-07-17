@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body{
+            text-align: center;
+        }
+        
+        .bat{
+            height: 75px;
+            
+        }
+        .btn{
+            height:100px;
+            width : 100px;
+            border: none;
+            margin: 10px;
+            background-color: palevioletred;
+            border-radius: 50px;
+        }
+        h1{
+            color:rgb(117, 72, 111);
+        }
+    </style>
+    <title>cricket game</title>
+</head>
+<body>
+    <h1>Bat Ball Stump Game</h1>
+    <button class="btn" onclick="
+    let computerChoice=generateComputerChoice(); 
+    let result=generateResult('Bat',computerChoice);
+    generateAlert('Bat',computerChoice,result);
+    "><img  class="bat" src="bat.png" alt="bat image"></button>
+
+    <button class="btn" onclick="
+    computerChoice=generateComputerChoice(); 
+    result=generateResult('Ball',computerChoice);
+    generateAlert('Ball',computerChoice,result);
+    "><img  class="bat" src="ball.png" alt="ball image"></button>
+
+    <button class="btn" onclick="
+    computerChoice=generateComputerChoice(); 
+    result=generateResult('Stump',computerChoice);
+    generateAlert('Stump',computerChoice,result);
+    "><img  class="bat" src="stump.png" alt="stump image"></button>
+
+    <h3 id="user-move"></h3>
+    <h3 id="computer-move"></h3>
+    <h3 id="result"></h3>
+    <h3 id="score"></h3>
+    <br>
+    <br><br>
+    <br><br>
+    <button class="reset-btn" onclick="
+    localStorage.clear();
+    score={
+            win:0,
+            lost:0,
+            tie:0,
+        };
+    score.displayScore=function(){
+    return `Won:${score.win}, Lost:${score.lost}, Tied:${score.tie}`;}
+    document.querySelector('#user-move').innerText='Game is reset';
+    document.querySelector('#computer-move').innerText='';
+    document.querySelector('#result').innerText='';
+    document.querySelector('#score').innerText=score.displayScore();
+    ">Reset</button>
+
+    
+   
+
+<script>
+    let scoreStr=localStorage.getItem('score');
+    let score=JSON.parse(scoreStr) || {
+            win:0,
+            lost:0,
+            tie:0,
+        };
+    score.displayScore=function(){
+        return `Won:${score.win}, Lost:${score.lost}, Tied:${score.tie}`;
+    }
+    function generateComputerChoice(){
+    let computerChoice='';
+    let random=Math.random()*3;
+    if(random>0 && random<=1)
+        return 'Bat';
+    else if(random>1 && random<=2)
+        return 'Ball';
+    else
+        return 'Stump';
+    }
+    function generateResult(userChoice,computerChoice){   if(userChoice===computerChoice){
+            score.tie++;
+            return'match Tied';
+        }       
+        else if((computerChoice==='Bat' && userChoice==='Ball') || (computerChoice==='Ball' && userChoice==='Stump') ||(computerChoice==='Stump' && userChoice==='Bat')) {  
+            score.lost++;
+            return'Computer won';
+        }
+        else{
+            score.win++;
+            return'user won';  
+        }
+    }
+    function generateAlert(userChoice,computerChoice,result){   
+        localStorage.setItem('score',JSON.stringify(score));
+        document.querySelector('#user-move').innerText=`You choosen ${userChoice}.`;
+        document.querySelector('#computer-move').innerText=`computer choosen ${computerChoice}.`;
+        document.querySelector('#result').innerText=result;
+        document.querySelector('#score').innerText=score.displayScore();
+    }
+    function reset(){
+        document.querySelector('#reset').innerText=`game is reset`;
+    }
+</script>    
+</body>
+</html>
